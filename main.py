@@ -110,15 +110,6 @@ st.markdown('## Detailed data:')
 l_col,m_col,m2_col,r_col = st.columns(4)
 with l_col:
     currency = st.selectbox(label='Currency:',options=currency_data['name'])
-# with m_col:
-#     every = st.selectbox(label='Every:',options=['1 hour','24 hours','30 days'])
-
-# if every == '1 hour':
-    # resolution = 3600
-# elif every == '24 hours':
-#     resolution = 86400
-# elif every == '30 days':
-#     resolution = 86400*30
 
 historic_data = fetch_data(currency)
 
