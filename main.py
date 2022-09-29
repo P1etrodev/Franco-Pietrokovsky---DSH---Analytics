@@ -12,7 +12,7 @@ def fetch_data(currency):
         ).json()['result'])
 
 st.set_page_config(page_title='Franco Pietrokovsky - PI03',layout='wide',page_icon='Henry.png')
-
+ 
 l_col,r_col,_,_,_ = st.columns([1,7,3,3,3])
 
 with l_col:
