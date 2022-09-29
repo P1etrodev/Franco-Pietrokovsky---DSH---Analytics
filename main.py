@@ -5,10 +5,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-# with open('style.css') as f:
-#     st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
-
-def fetch_data(currency,resolution):
+def fetch_data(currency):
+    resolution = 3600
     return pd.DataFrame.from_dict(requests.get(
         f'https://ftx.com/api/markets/{currency}/USD/candles?resolution={resolution}'
         ).json()['result'])
@@ -23,22 +21,18 @@ with l_col:
 with r_col: 
     st.title('Franco Pietrokovsky - DTS03 - PI03')
     
-with st.expander('PI Description'):
-    st.empty()
+with st.expander('Documentation'):
+    with open('README.md',encoding='utf-8') as f:
+        st.markdown(f.read())
 
 st.markdown('---')
 
 markets = pd.DataFrame.from_dict(requests.get('https://ftx.com/api/markets').json()['result'])
 
-# st.dataframe(markets)
-
 currency_data = markets[['name',
                    'last',
                    'bid',
                    'price',
-                   'change1h',
-                   'change24h',
-                   'changeBod',
                    'priceHigh24h',
                    'priceLow24h']].sort_values(by='price',ascending=False)
 
@@ -116,17 +110,17 @@ st.markdown('## Detailed data:')
 l_col,m_col,m2_col,r_col = st.columns(4)
 with l_col:
     currency = st.selectbox(label='Currency:',options=currency_data['name'])
-with m_col:
-    every = st.selectbox(label='Every:',options=['1 hour','24 hours','30 days'])
+# with m_col:
+#     every = st.selectbox(label='Every:',options=['1 hour','24 hours','30 days'])
 
-if every == '1 hour':
-    resolution = 3600
-elif every == '24 hours':
-    resolution = 86400
-elif every == '30 days':
-    resolution = 86400*30
+# if every == '1 hour':
+    # resolution = 3600
+# elif every == '24 hours':
+#     resolution = 86400
+# elif every == '30 days':
+#     resolution = 86400*30
 
-historic_data = fetch_data(currency,resolution)
+historic_data = fetch_data(currency)
 
 detailed = st.expander('Details',expanded=True)
 dataframe = st.expander('Dataframe')
@@ -163,7 +157,6 @@ with detailed:
     with r_col:
         st.metric(label='Closing price (USD):',value=f'$ {close_price}')
 
-    # st.markdown('### Historic data:')
     plot = go.Figure(
         data=[
             go.Candlestick(x=historic_data['startTime'],
